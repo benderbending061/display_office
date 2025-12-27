@@ -419,74 +419,6 @@ lvgl:
 
   top_layer:
     widgets:
-      - obj:
-          id: taskbar
-          x: 0
-          y: 440
-          width: 800
-          height: 40
-          bg_color: 0x1C1B1F
-          bg_opa: COVER
-          border_width: 1
-          border_side: TOP
-          border_color: 0x49454F
-          border_opa: 50%
-          pad_all: 0
-          widgets:
-            - button:
-                id: btn_garage
-                x: 0
-                y: 0
-                styles: nav_button
-                on_click:
-                  - lvgl.page.show: garage_page
-                  - lambda: |-
-                      id(active_page) = 0;
-                  - script.execute: refresh_nav_buttons
-                  - script.execute: reset_inactivity_timer
-                widgets:
-                  - label:
-                      text: "Garage"
-                      text_color: 0xE6E1E5
-                      text_font: font_normal
-                      align: CENTER
-
-            - button:
-                id: btn_basement
-                x: 267
-                y: 0
-                styles: nav_button
-                on_click:
-                  - lvgl.page.show: basement_page
-                  - lambda: |-
-                      id(active_page) = 1;
-                  - script.execute: refresh_nav_buttons
-                  - script.execute: reset_inactivity_timer
-                widgets:
-                  - label:
-                      text: "Basement"
-                      text_color: 0xE6E1E5
-                      text_font: font_normal
-                      align: CENTER
-
-            - button:
-                id: btn_office
-                x: 534
-                y: 0
-                styles: nav_button
-                on_click:
-                  - lvgl.page.show: office_page
-                  - lambda: |-
-                      id(active_page) = 2;
-                  - script.execute: refresh_nav_buttons
-                  - script.execute: reset_inactivity_timer
-                widgets:
-                  - label:
-                      text: "Office"
-                      text_color: 0xE6E1E5
-                      text_font: font_normal
-                      align: CENTER
-
       # Camera popup overlay (hidden by default)
       - obj:
           id: camera_popup
@@ -524,7 +456,7 @@ lvgl:
       widgets:
         - obj:
             width: 800
-            height: 440
+            height: 480
             x: 0
             y: 0
             styles: page_style
@@ -544,7 +476,7 @@ lvgl:
                   x: 100
                   y: 80
                   width: 600
-                  height: 350
+                  height: 310
                   bg_opa: TRANSP
                   border_width: 0
                   scrollbar_mode: "off"
@@ -642,11 +574,79 @@ lvgl:
                               width: 110
                               pad_top: 2
 
+              # Taskbar at bottom
+              - obj:
+                  x: 0
+                  y: 440
+                  width: 800
+                  height: 40
+                  bg_color: 0x1C1B1F
+                  bg_opa: COVER
+                  border_width: 1
+                  border_side: TOP
+                  border_color: 0x49454F
+                  border_opa: 50%
+                  pad_all: 0
+                  widgets:
+                    - button:
+                        id: btn_garage
+                        x: 0
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: garage_page
+                          - lambda: |-
+                              id(active_page) = 0;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Garage"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
+                    - button:
+                        id: btn_basement
+                        x: 267
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: basement_page
+                          - lambda: |-
+                              id(active_page) = 1;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Basement"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
+                    - button:
+                        id: btn_office
+                        x: 534
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: office_page
+                          - lambda: |-
+                              id(active_page) = 2;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Office"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
     - id: basement_page
       widgets:
         - obj:
             width: 800
-            height: 440
+            height: 480
             x: 0
             y: 0
             styles: page_style
@@ -666,7 +666,7 @@ lvgl:
                   x: 100
                   y: 80
                   width: 600
-                  height: 350
+                  height: 310
                   bg_opa: TRANSP
                   border_width: 0
                   scrollbar_mode: "off"
@@ -850,11 +850,79 @@ lvgl:
                               width: 110
                               pad_top: 2
 
+              # Taskbar at bottom
+              - obj:
+                  x: 0
+                  y: 440
+                  width: 800
+                  height: 40
+                  bg_color: 0x1C1B1F
+                  bg_opa: COVER
+                  border_width: 1
+                  border_side: TOP
+                  border_color: 0x49454F
+                  border_opa: 50%
+                  pad_all: 0
+                  widgets:
+                    - button:
+                        id: btn_garage_basement
+                        x: 0
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: garage_page
+                          - lambda: |-
+                              id(active_page) = 0;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Garage"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
+                    - button:
+                        id: btn_basement_basement
+                        x: 267
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: basement_page
+                          - lambda: |-
+                              id(active_page) = 1;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Basement"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
+                    - button:
+                        id: btn_office_basement
+                        x: 534
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: office_page
+                          - lambda: |-
+                              id(active_page) = 2;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Office"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
     - id: office_page
       widgets:
         - obj:
             width: 800
-            height: 440
+            height: 480
             x: 0
             y: 0
             styles: page_style
@@ -874,7 +942,7 @@ lvgl:
                   x: 100
                   y: 80
                   width: 600
-                  height: 350
+                  height: 310
                   bg_opa: TRANSP
                   border_width: 0
                   scrollbar_mode: "off"
@@ -972,6 +1040,74 @@ lvgl:
                               width: 110
                               pad_top: 2
 
+              # Taskbar at bottom
+              - obj:
+                  x: 0
+                  y: 440
+                  width: 800
+                  height: 40
+                  bg_color: 0x1C1B1F
+                  bg_opa: COVER
+                  border_width: 1
+                  border_side: TOP
+                  border_color: 0x49454F
+                  border_opa: 50%
+                  pad_all: 0
+                  widgets:
+                    - button:
+                        id: btn_garage_office
+                        x: 0
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: garage_page
+                          - lambda: |-
+                              id(active_page) = 0;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Garage"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
+                    - button:
+                        id: btn_basement_office
+                        x: 267
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: basement_page
+                          - lambda: |-
+                              id(active_page) = 1;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Basement"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
+                    - button:
+                        id: btn_office_office
+                        x: 534
+                        y: 0
+                        styles: nav_button
+                        on_click:
+                          - lvgl.page.show: office_page
+                          - lambda: |-
+                              id(active_page) = 2;
+                          - script.execute: refresh_nav_buttons
+                          - script.execute: reset_inactivity_timer
+                        widgets:
+                          - label:
+                              text: "Office"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              align: CENTER
+
 # SCRIPTS SECTION
 script:
   - id: refresh_nav_buttons
@@ -980,6 +1116,7 @@ script:
           condition:
             lambda: 'return id(active_page) == 0;'
           then:
+            # Garage page buttons - active
             - lvgl.button.update:
                 id: btn_garage
                 styles: nav_button_active
@@ -988,11 +1125,32 @@ script:
                 styles: nav_button
             - lvgl.button.update:
                 id: btn_office
+                styles: nav_button
+            # Basement page buttons - garage active
+            - lvgl.button.update:
+                id: btn_garage_basement
+                styles: nav_button_active
+            - lvgl.button.update:
+                id: btn_basement_basement
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_office_basement
+                styles: nav_button
+            # Office page buttons - garage active
+            - lvgl.button.update:
+                id: btn_garage_office
+                styles: nav_button_active
+            - lvgl.button.update:
+                id: btn_basement_office
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_office_office
                 styles: nav_button
       - if:
           condition:
             lambda: 'return id(active_page) == 1;'
           then:
+            # Garage page buttons - basement active
             - lvgl.button.update:
                 id: btn_garage
                 styles: nav_button
@@ -1002,10 +1160,31 @@ script:
             - lvgl.button.update:
                 id: btn_office
                 styles: nav_button
+            # Basement page buttons - active
+            - lvgl.button.update:
+                id: btn_garage_basement
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_basement_basement
+                styles: nav_button_active
+            - lvgl.button.update:
+                id: btn_office_basement
+                styles: nav_button
+            # Office page buttons - basement active
+            - lvgl.button.update:
+                id: btn_garage_office
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_basement_office
+                styles: nav_button_active
+            - lvgl.button.update:
+                id: btn_office_office
+                styles: nav_button
       - if:
           condition:
             lambda: 'return id(active_page) == 2;'
           then:
+            # Garage page buttons - office active
             - lvgl.button.update:
                 id: btn_garage
                 styles: nav_button
@@ -1014,6 +1193,26 @@ script:
                 styles: nav_button
             - lvgl.button.update:
                 id: btn_office
+                styles: nav_button_active
+            # Basement page buttons - office active
+            - lvgl.button.update:
+                id: btn_garage_basement
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_basement_basement
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_office_basement
+                styles: nav_button_active
+            # Office page buttons - active
+            - lvgl.button.update:
+                id: btn_garage_office
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_basement_office
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_office_office
                 styles: nav_button_active
 
   # GARAGE SCRIPTS
