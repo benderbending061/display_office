@@ -1,0 +1,1287 @@
+esphome:
+  name: esp32-p4-dashboard
+  friendly_name: "ESP32-P4 Home Dashboard"
+  comment: "GUITION JC4880P443C - ESP32-P4-NRW32 (32MB PSRAM / 16MB Flash) + ESP32-C6 WiFi + 4.3\" IPS 480x800 ST7701S"
+  platformio_options:
+    board_build.flash_mode: qio
+
+esp32:
+  board: esp32-p4-evboard
+  flash_size: 16MB
+  cpu_frequency: 360MHz
+  framework:
+    type: esp-idf
+    version: 5.5.1
+    advanced:
+      enable_idf_experimental_features: yes
+      disable_vfs_support_dir: false
+    sdkconfig_options:
+      # ESP32-C6 Hosted Configuration
+      CONFIG_SPIRAM_FETCH_INSTRUCTIONS: y
+      CONFIG_SPIRAM_RODATA: y
+      CONFIG_ESP32_SPIRAM_SUPPORT: "y"
+      CONFIG_SPIRAM_USE_MALLOC: "y"
+      CONFIG_FATFS_LFN_STACK: "y"
+      #CONFIG_LWIP_SO_RCVBUF: "y"
+      CONFIG_LWIP_MAX_SOCKETS: "16"
+      CONFIG_VFS_SUPPORT_IO: "y"
+      CONFIG_VFS_MAX_COUNT: "16" 
+      CONFIG_ESP_MAIN_TASK_STACK_SIZE: "16384"
+      CONFIG_ESP_TIMER_TASK_STACK_SIZE: "4096"
+      CONFIG_ESP_TASK_WDT_TIMEOUT_S: "60"
+      CONFIG_ESP_TASK_LOOP_STACK_SIZE: "16384"
+      CONFIG_FATFS_LFN_HEAP: "y"
+      DCONFIG_USE_AUDIO_AAC_SUPPORT: "y"
+      DCONFIG_ESP_JPG_DECODE_ENABLE: "y"
+      DCONFIG_ESPHOME_ENABLE_PNGLE: "1"
+
+      # WiFi Remote settings
+      CONFIG_WIFI_RMT_STATIC_RX_BUFFER_NUM: "16"
+      CONFIG_WIFI_RMT_DYNAMIC_RX_BUFFER_NUM: "64"
+      CONFIG_WIFI_RMT_DYNAMIC_TX_BUFFER_NUM: "64"
+      CONFIG_WIFI_RMT_AMPDU_TX_ENABLED: y
+      CONFIG_WIFI_RMT_TX_BA_WIN: "32"
+      CONFIG_WIFI_RMT_AMPDU_RX_ENABLED: y
+      CONFIG_WIFI_RMT_RX_BA_WIN: "32"
+
+      # LWIP optimization
+      CONFIG_LWIP_TCP_SND_BUF_DEFAULT: "65534"
+      CONFIG_LWIP_TCP_WND_DEFAULT: "65534"
+      CONFIG_LWIP_TCP_RECVMBOX_SIZE: "64"
+      CONFIG_LWIP_UDP_RECVMBOX_SIZE: "64"
+      CONFIG_LWIP_TCPIP_RECVMBOX_SIZE: "64"
+      CONFIG_LWIP_TCP_SACK_OUT: y
+
+      # Flash configuration - 16MB
+      CONFIG_ESPTOOLPY_FLASHSIZE_16MB: y
+
+      # PSRAM configuration - 32MB
+      CONFIG_SPIRAM: y
+      CONFIG_SPIRAM_SIZE: "33554432"
+      CONFIG_SPIRAM_XIP_FROM_PSRAM: y
+      CONFIG_SPIRAM_SPEED_200M: y
+      CONFIG_SPIRAM_MODE_HEX: y
+
+# ESP32-C6 Hosted component for WiFi (SDIO)
+esp32_hosted:
+  variant: ESP32C6
+  reset_pin: GPIO54
+  active_high: true
+  clk_pin: GPIO18
+  cmd_pin: GPIO19
+  d0_pin: GPIO14
+  d1_pin: GPIO15
+  d2_pin: GPIO16
+  d3_pin: GPIO17
+
+# WiFi via ESP32-C6 hosted
+wifi:
+  ssid: "futbolislife"
+  password: "977Pokhara061"
+
+  # Enable fallback hotspot (for setup)
+  ap:
+    ssid: "ESP32-P4-Dashboard"
+    password: "esphome123"
+
+# Home Assistant Native API (much better than MQTT!)
+api:
+  encryption:
+    key: "08pUFSMsU9yzYSR7uZGjM6FmMdw8d2GYpFM2FEMGnh8="
+
+# Enable OTA updates
+ota:
+  - platform: esphome
+    password: "esphome123"
+
+
+
+# Web server for diagnostics
+web_server:
+  port: 80
+
+
+logger:
+  level: DEBUG
+  hardware_uart: USB_SERIAL_JTAG
+  baud_rate: 115200
+
+debug:
+  id: debugger
+  update_interval: 5s
+
+# Global variables for page tracking and interaction
+globals:
+  - id: active_page
+    type: int
+    restore_value: no
+    initial_value: "0"
+  - id: last_interaction_time
+    type: int
+    restore_value: no
+    initial_value: "0"
+  - id: camera_popup_visible
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+# Auto-return to home interval
+interval:
+  - interval: 1s
+    then:
+      - script.execute: check_auto_return
+
+# LDO voltage regulator for MIPI display
+esp_ldo:
+  - id: ldo_mipi_phy
+    channel: 3
+    voltage: 2.5V
+  - id: ldo_mipi_logic
+    channel: 4
+    voltage: 1.8V
+
+# PSRAM for display buffer (required for MIPI DSI)
+psram:
+  mode: hex
+  speed: 200MHz
+
+# I2C Bus for touchscreen and peripherals
+i2c:
+  - id: bus_a
+    sda: GPIO7
+    scl: GPIO8
+    frequency: 400kHz
+    scan: true
+
+# Touchscreen GT911
+touchscreen:
+  - platform: gt911
+    id: my_touchscreen
+    i2c_id: bus_a
+    interrupt_pin: GPIO21
+    update_interval: 50ms
+    transform:
+      swap_xy: true
+      mirror_x: false
+      mirror_y: false
+
+# Backlight control
+output:
+  - platform: ledc
+    id: backlight_output
+    pin: GPIO23
+    frequency: 100Hz
+    inverted: true
+    min_power: 0.0
+    max_power: 0.8
+
+light:
+  - platform: monochromatic
+    id: display_backlight
+    name: Display Backlight
+    output: backlight_output
+    restore_mode: ALWAYS_ON
+    default_transition_length: 250ms
+
+# Display - MIPI DSI 480x800 (JC4880P443C with ST7701S)
+display:
+  - platform: mipi_dsi
+    id: my_display
+    model: JC4880P443
+    reset_pin:
+      number: GPIO5
+    color_order: rgb
+    invert_colors: false
+    rotation: 90
+    update_interval: 16ms
+    dimensions:
+      width: 800
+      height: 480
+
+# Fonts for dashboard
+font:
+  - file: "gfonts://Roboto@700"
+    id: font_header
+    size: 32
+    bpp: 4
+  - file: "gfonts://Roboto"
+    id: font_normal
+    size: 20
+    bpp: 4
+  - file: "gfonts://Roboto"
+    id: font_small
+    size: 14
+    bpp: 4
+  # Material Design Icons for beautiful icons
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: mdi_large
+    size: 48
+    bpp: 4
+    glyphs: [
+      "\U000F0335", # mdi-lightbulb (lights)
+      "\U000F0336", # mdi-lightbulb-outline (lights off)
+      "\U000F0769", # mdi-power-plug (outlets)
+      "\U000F050F", # mdi-home (home)
+      "\U000F002D", # mdi-bed (bedroom)
+      "\U000F0C99", # mdi-stairs (stairs)
+      "\U000F0C5C", # mdi-dumbbell (gym)
+      "\U000F0A48", # mdi-washing-machine (laundry)
+      "\U000F04C9", # mdi-sofa (den)
+      "\U000F002A", # mdi-door (entry)
+      "\U000F0E7E", # mdi-floor-plan (hallway)
+    ]
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: mdi_small
+    size: 24
+    bpp: 4
+    glyphs: [
+      "\U000F0335", # mdi-lightbulb
+      "\U000F0336", # mdi-lightbulb-outline
+    ]
+
+# Colors for dashboard - Modern Material Design 3 palette
+color:
+  - id: color_primary
+    hex: "6750A4"  # Purple primary
+  - id: color_on_primary
+    hex: "FFFFFF"
+  - id: color_surface
+    hex: "1C1B1F"  # Dark surface
+  - id: color_on_surface
+    hex: "E6E1E5"  # Light text on dark
+  - id: color_surface_variant
+    hex: "49454F"  # Lighter surface
+  - id: color_outline
+    hex: "79747E"
+  # State colors
+  - id: color_active
+    hex: "D0BCFF"  # Light purple for active/on state
+  - id: color_inactive
+    hex: "4A4458"  # Muted for inactive/off state
+  - id: color_accent
+    hex: "FFA726"  # Orange accent for actions
+  - id: color_success
+    hex: "00C853"  # Green for success states
+  - id: color_error
+    hex: "CF6679"  # Red for errors
+
+# Home Assistant device states (using template sensors)
+# These will sync automatically with HA via the API
+sensor:
+  - platform: homeassistant
+    name: "WiFi Signal"
+    entity_id: sensor.esp32_p4_dashboard_wifi_signal
+
+# Device state tracking and camera triggers
+text_sensor:
+  # GARAGE DEVICES
+  - platform: homeassistant
+    entity_id: switch.garage_door
+    id: garage_door_state
+    on_value:
+      then:
+        - script.execute: update_garage_door
+
+  - platform: homeassistant
+    entity_id: switch.garage_light
+    id: garage_light_state
+    on_value:
+      then:
+        - script.execute: update_garage_light
+
+  # BASEMENT DEVICES - Light Switches
+  - platform: homeassistant
+    entity_id: switch.lightswitcbasementlanding
+    id: basement_landing_state
+    on_value:
+      then:
+        - script.execute: update_basement_landing
+
+  - platform: homeassistant
+    entity_id: switch.lightswitch01basementliving
+    id: basement_living_1_state
+    on_value:
+      then:
+        - script.execute: update_basement_living_1
+
+  - platform: homeassistant
+    entity_id: switch.lightswitch02basementliving
+    id: basement_living_2_state
+    on_value:
+      then:
+        - script.execute: update_basement_living_2
+
+  # BASEMENT DEVICES - Power Outlets
+  - platform: homeassistant
+    entity_id: switch.outletxmaslight
+    id: xmas_light_basement_state
+    on_value:
+      then:
+        - script.execute: update_xmas_light_basement
+
+  # OFFICE DEVICES - Power Outlets
+  - platform: homeassistant
+    entity_id: switch.outletofficedesklight
+    id: office_desk_light_state
+    on_value:
+      then:
+        - script.execute: update_office_desk_light
+
+  - platform: homeassistant
+    entity_id: switch.outletmk4
+    id: outlet_mk4_state
+    on_value:
+      then:
+        - script.execute: update_outlet_mk4
+
+# Reolink camera human detection trigger
+binary_sensor:
+  - platform: homeassistant
+    name: "Reolink Human Detected"
+    entity_id: binary_sensor.reolink_person_detected
+    id: reolink_human
+    on_press:
+      then:
+        - script.execute: show_camera_popup
+
+
+# Camera image for Reolink
+image:
+  - platform: homeassistant
+    entity_id: camera.reolink_camera
+    id: reolink_snapshot
+    resize: 800x480
+
+# LVGL Dashboard
+lvgl:
+  displays: my_display
+  touchscreens: my_touchscreen
+  buffer_size: 10%
+  byte_order: little_endian
+
+  style_definitions:
+    - id: sidebar_style
+      bg_color: 0x1C1B1F
+      bg_opa: COVER
+      border_width: 0
+      pad_all: 0
+
+    - id: nav_button
+      width: 267
+      height: 40
+      bg_opa: TRANSP
+      border_width: 0
+      pad_all: 5
+      radius: 0
+
+    - id: nav_button_active
+      width: 267
+      height: 40
+      bg_color: 0xD0BCFF
+      bg_opa: 25%
+      border_width: 0
+      border_side: BOTTOM
+      border_color: 0xD0BCFF
+      border_opa: COVER
+      pad_all: 5
+      radius: 0
+
+    - id: page_style
+      bg_color: 0x1C1B1F
+      bg_opa: COVER
+      border_width: 0
+      pad_all: 0
+
+    - id: device_button
+      width: 70
+      height: 70
+      radius: 1000
+      bg_color: 0x4A4458
+      bg_opa: COVER
+      border_width: 0
+      shadow_width: 4
+      shadow_color: 0x000000
+      shadow_opa: 50%
+
+    - id: device_button_active
+      width: 70
+      height: 70
+      radius: 1000
+      bg_color: 0xD0BCFF
+      bg_opa: COVER
+      border_width: 0
+      shadow_width: 8
+      shadow_color: 0xD0BCFF
+      shadow_opa: 70%
+
+  top_layer:
+    widgets:
+      - obj:
+          id: taskbar
+          x: 0
+          y: 440
+          width: 800
+          height: 40
+          bg_color: 0x1C1B1F
+          bg_opa: COVER
+          border_width: 1
+          border_side: TOP
+          border_color: 0x49454F
+          border_opa: 50%
+          pad_all: 0
+          widgets:
+            - button:
+                id: btn_garage
+                x: 0
+                y: 0
+                styles: nav_button
+                on_click:
+                  - lvgl.page.show: garage_page
+                  - lambda: |-
+                      id(active_page) = 0;
+                  - script.execute: refresh_nav_buttons
+                  - script.execute: reset_inactivity_timer
+                widgets:
+                  - label:
+                      text: "Garage"
+                      text_color: 0xE6E1E5
+                      text_font: font_normal
+                      align: CENTER
+
+            - button:
+                id: btn_basement
+                x: 267
+                y: 0
+                styles: nav_button
+                on_click:
+                  - lvgl.page.show: basement_page
+                  - lambda: |-
+                      id(active_page) = 1;
+                  - script.execute: refresh_nav_buttons
+                  - script.execute: reset_inactivity_timer
+                widgets:
+                  - label:
+                      text: "Basement"
+                      text_color: 0xE6E1E5
+                      text_font: font_normal
+                      align: CENTER
+
+            - button:
+                id: btn_office
+                x: 534
+                y: 0
+                styles: nav_button
+                on_click:
+                  - lvgl.page.show: office_page
+                  - lambda: |-
+                      id(active_page) = 2;
+                  - script.execute: refresh_nav_buttons
+                  - script.execute: reset_inactivity_timer
+                widgets:
+                  - label:
+                      text: "Office"
+                      text_color: 0xE6E1E5
+                      text_font: font_normal
+                      align: CENTER
+
+      # Camera popup overlay (hidden by default)
+      - obj:
+          id: camera_popup
+          x: 0
+          y: 0
+          width: 800
+          height: 480
+          bg_color: 0x000000
+          bg_opa: COVER
+          hidden: true
+          widgets:
+            - image:
+                id: camera_image
+                align: CENTER
+                src: reolink_snapshot
+            - button:
+                id: btn_close_camera
+                x: 750
+                y: 10
+                width: 40
+                height: 40
+                bg_color: 0xCF6679
+                radius: 20
+                on_click:
+                  - script.execute: hide_camera_popup
+                widgets:
+                  - label:
+                      text: "X"
+                      text_color: 0xFFFFFF
+                      text_font: font_header
+                      align: CENTER
+
+  pages:
+    - id: garage_page
+      widgets:
+        - obj:
+            width: 800
+            height: 440
+            x: 0
+            y: 0
+            styles: page_style
+            widgets:
+              - label:
+                  text: "Garage"
+                  text_color: 0xE6E1E5
+                  text_font: font_header
+                  x: 0
+                  y: 15
+                  width: 800
+                  height: 40
+                  text_align: CENTER
+
+              # Flex container for device cards
+              - obj:
+                  x: 100
+                  y: 80
+                  width: 600
+                  height: 350
+                  bg_opa: TRANSP
+                  border_width: 0
+                  scrollbar_mode: "off"
+                  layout:
+                    type: FLEX
+                    flex_flow: ROW_WRAP
+                    flex_align_main: START
+                    flex_align_cross: START
+                    pad_row: 25
+                    pad_column: 60
+                  widgets:
+                    # Garage Door Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: garage_door_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.garage_door
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: garage_door_icon
+                                    text: "\U000F0076"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Garage Door"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: garage_door_status
+                              text: "CLOSED"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+                    # Garage Light Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: garage_light_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.garage_light
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: garage_light_icon
+                                    text: "\U000F0335"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Garage Light"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: garage_light_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+    - id: basement_page
+      widgets:
+        - obj:
+            width: 800
+            height: 440
+            x: 0
+            y: 0
+            styles: page_style
+            widgets:
+              - label:
+                  text: "Basement"
+                  text_color: 0xE6E1E5
+                  text_font: font_header
+                  x: 0
+                  y: 15
+                  width: 800
+                  height: 40
+                  text_align: CENTER
+
+              # Flex container for device cards
+              - obj:
+                  x: 100
+                  y: 80
+                  width: 600
+                  height: 350
+                  bg_opa: TRANSP
+                  border_width: 0
+                  scrollbar_mode: "off"
+                  layout:
+                    type: FLEX
+                    flex_flow: ROW_WRAP
+                    flex_align_main: START
+                    flex_align_cross: START
+                    pad_row: 25
+                    pad_column: 60
+                  widgets:
+                    # Landing Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: basement_landing_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.lightswitcbasementlanding
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: basement_landing_icon
+                                    text: "\U000F0335"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Landing"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: basement_landing_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+                    # Living 1 Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: basement_living_1_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.lightswitch01basementliving
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: basement_living_1_icon
+                                    text: "\U000F0335"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Living 1"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: basement_living_1_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+                    # Living 2 Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: basement_living_2_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.lightswitch02basementliving
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: basement_living_2_icon
+                                    text: "\U000F0335"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Living 2"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: basement_living_2_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+                    # Xmas Light Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: xmas_light_basement_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.outletxmaslight
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: xmas_light_basement_icon
+                                    text: "\U000F0769"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Xmas Light"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: xmas_light_basement_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+    - id: office_page
+      widgets:
+        - obj:
+            width: 800
+            height: 440
+            x: 0
+            y: 0
+            styles: page_style
+            widgets:
+              - label:
+                  text: "Office"
+                  text_color: 0xE6E1E5
+                  text_font: font_header
+                  x: 0
+                  y: 15
+                  width: 800
+                  height: 40
+                  text_align: CENTER
+
+              # Flex container for device cards
+              - obj:
+                  x: 100
+                  y: 80
+                  width: 600
+                  height: 350
+                  bg_opa: TRANSP
+                  border_width: 0
+                  scrollbar_mode: "off"
+                  layout:
+                    type: FLEX
+                    flex_flow: ROW_WRAP
+                    flex_align_main: START
+                    flex_align_cross: START
+                    pad_row: 25
+                    pad_column: 60
+                  widgets:
+                    # Desk Light Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: office_desk_light_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.outletofficedesklight
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: office_desk_light_icon
+                                    text: "\U000F0769"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "Desk Light"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: office_desk_light_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+                    # MK4 Card
+                    - obj:
+                        width: 110
+                        height: 130
+                        bg_opa: TRANSP
+                        layout:
+                          type: FLEX
+                          flex_flow: COLUMN
+                          flex_align_main: START
+                          flex_align_cross: CENTER
+                        widgets:
+                          - button:
+                              id: outlet_mk4_btn
+                              styles: device_button
+                              on_click:
+                                - homeassistant.service:
+                                    service: switch.toggle
+                                    data:
+                                      entity_id: switch.outletmk4
+                                - script.execute: reset_inactivity_timer
+                              widgets:
+                                - label:
+                                    id: outlet_mk4_icon
+                                    text: "\U000F0769"
+                                    text_color: 0xFFFFFF
+                                    text_font: mdi_large
+                                    align: CENTER
+                          - label:
+                              text: "MK4"
+                              text_color: 0xE6E1E5
+                              text_font: font_normal
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 8
+                          - label:
+                              id: outlet_mk4_status
+                              text: "OFF"
+                              text_color: 0xCCCCCC
+                              text_font: font_small
+                              text_align: CENTER
+                              width: 110
+                              pad_top: 2
+
+# SCRIPTS SECTION
+script:
+  - id: refresh_nav_buttons
+    then:
+      - if:
+          condition:
+            lambda: 'return id(active_page) == 0;'
+          then:
+            - lvgl.button.update:
+                id: btn_garage
+                styles: nav_button_active
+            - lvgl.button.update:
+                id: btn_basement
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_office
+                styles: nav_button
+      - if:
+          condition:
+            lambda: 'return id(active_page) == 1;'
+          then:
+            - lvgl.button.update:
+                id: btn_garage
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_basement
+                styles: nav_button_active
+            - lvgl.button.update:
+                id: btn_office
+                styles: nav_button
+      - if:
+          condition:
+            lambda: 'return id(active_page) == 2;'
+          then:
+            - lvgl.button.update:
+                id: btn_garage
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_basement
+                styles: nav_button
+            - lvgl.button.update:
+                id: btn_office
+                styles: nav_button_active
+
+  # GARAGE SCRIPTS
+  - id: update_garage_door
+    then:
+      - if:
+          condition:
+            lambda: 'return id(garage_door_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: garage_door_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: garage_door_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: garage_door_status
+                text: "OPEN"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: garage_door_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: garage_door_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: garage_door_status
+                text: "CLOSED"
+                text_color: 0xffffff
+
+  - id: update_garage_light
+    then:
+      - if:
+          condition:
+            lambda: 'return id(garage_light_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: garage_light_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: garage_light_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: garage_light_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: garage_light_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: garage_light_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: garage_light_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  # BASEMENT SCRIPTS
+  - id: update_basement_landing
+    then:
+      - if:
+          condition:
+            lambda: 'return id(basement_landing_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: basement_landing_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: basement_landing_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: basement_landing_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: basement_landing_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: basement_landing_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: basement_landing_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  - id: update_basement_living_1
+    then:
+      - if:
+          condition:
+            lambda: 'return id(basement_living_1_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: basement_living_1_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: basement_living_1_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: basement_living_1_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: basement_living_1_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: basement_living_1_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: basement_living_1_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  - id: update_basement_living_2
+    then:
+      - if:
+          condition:
+            lambda: 'return id(basement_living_2_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: basement_living_2_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: basement_living_2_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: basement_living_2_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: basement_living_2_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: basement_living_2_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: basement_living_2_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  - id: update_xmas_light_basement
+    then:
+      - if:
+          condition:
+            lambda: 'return id(xmas_light_basement_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: xmas_light_basement_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: xmas_light_basement_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: xmas_light_basement_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: xmas_light_basement_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: xmas_light_basement_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: xmas_light_basement_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  # OFFICE SCRIPTS
+  - id: update_office_desk_light
+    then:
+      - if:
+          condition:
+            lambda: 'return id(office_desk_light_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: office_desk_light_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: office_desk_light_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: office_desk_light_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: office_desk_light_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: office_desk_light_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: office_desk_light_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  - id: update_outlet_mk4
+    then:
+      - if:
+          condition:
+            lambda: 'return id(outlet_mk4_state).state == "on";'
+          then:
+            - lvgl.button.update:
+                id: outlet_mk4_btn
+                styles: device_button_active
+            - lvgl.label.update:
+                id: outlet_mk4_icon
+                text_color: 0xff9e00
+            - lvgl.label.update:
+                id: outlet_mk4_status
+                text: "ON"
+                text_color: 0x000000
+          else:
+            - lvgl.button.update:
+                id: outlet_mk4_btn
+                styles: device_button
+            - lvgl.label.update:
+                id: outlet_mk4_icon
+                text_color: 0xffffff
+            - lvgl.label.update:
+                id: outlet_mk4_status
+                text: "OFF"
+                text_color: 0xffffff
+
+  # Camera popup scripts
+  - id: show_camera_popup
+    then:
+      - lvgl.widget.show: camera_popup
+      - lambda: |-
+          id(camera_popup_visible) = true;
+
+  - id: hide_camera_popup
+    then:
+      - lvgl.widget.hide: camera_popup
+      - lambda: |-
+          id(camera_popup_visible) = false;
+
+  # AUTO RETURN TO HOME SCRIPT
+  - id: check_auto_return
+    then:
+      - if:
+          condition:
+            lambda: |-
+              static unsigned long last_check = 0;
+              unsigned long current_time = millis();
+
+              // Check every 1000ms (1 second)
+              if (current_time - last_check >= 1000) {
+                last_check = current_time;
+
+                // Get current time in seconds
+                int current_seconds = current_time / 1000;
+
+                // Check if 10 seconds have passed since last interaction
+                if ((current_seconds - id(last_interaction_time)) >= 10 && id(active_page) != 0 && !id(camera_popup_visible)) {
+                  id(active_page) = 0;
+                  return true;
+                }
+              }
+              return false;
+          then:
+            - lvgl.page.show: garage_page
+            - script.execute: refresh_nav_buttons
+
+  # RESET INACTIVITY TIMER SCRIPT
+  - id: reset_inactivity_timer
+    then:
+      - lambda: |-
+          id(last_interaction_time) = millis() / 1000;
