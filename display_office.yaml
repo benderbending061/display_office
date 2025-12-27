@@ -345,12 +345,12 @@ binary_sensor:
         - script.execute: show_camera_popup
 
 
-# Camera image for Reolink
-image:
-  - platform: homeassistant
-    entity_id: camera.reolink_camera
+# Camera image for Reolink - using online_image to fetch from Home Assistant
+online_image:
+  - url: "http://homeassistant.local:8123/api/camera_proxy/camera.reolink_camera"
     id: reolink_snapshot
-    resize: 800x480
+    format: PNG
+    type: RGB565
 
 # LVGL Dashboard
 lvgl:
@@ -1243,6 +1243,8 @@ script:
   # Camera popup scripts
   - id: show_camera_popup
     then:
+      - online_image.update: reolink_snapshot
+      - delay: 500ms  # Wait for image to download
       - lvgl.widget.show: camera_popup
       - lambda: |-
           id(camera_popup_visible) = true;
