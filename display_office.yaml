@@ -344,10 +344,13 @@ binary_sensor:
       then:
         - script.execute: show_camera_popup
 
+# HTTP request component for fetching camera images
+http_request:
+  timeout: 10s
 
 # Camera image for Reolink - using online_image to fetch from Home Assistant
 online_image:
-  - url: "http://homeassistant.local:8123/api/camera_proxy/camera.reolink_camera"
+  - url: "http://192.168.88.37:8123/api/camera_proxy/camera.reolink_camera"
     id: reolink_snapshot
     format: PNG
     type: RGB565
