@@ -1246,8 +1246,6 @@ script:
   # Camera popup scripts
   - id: show_camera_popup
     then:
-      - online_image.update: reolink_snapshot
-      - delay: 500ms  # Wait for image to download
       - lvgl.widget.show: camera_popup
       - lambda: |-
           id(camera_popup_visible) = true;
