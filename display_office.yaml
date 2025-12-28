@@ -1139,100 +1139,100 @@ script:
             - lvgl.button.update:
                 id: btn_garage
                 styles: nav_button_active
-            - lvgl.button.update:
-                id: btn_basement
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_office
-                styles: nav_button
-            # Basement page buttons - garage active
-            - lvgl.button.update:
-                id: btn_garage_basement
-                styles: nav_button_active
-            - lvgl.button.update:
-                id: btn_basement_basement
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_office_basement
-                styles: nav_button
-            # Office page buttons - garage active
-            - lvgl.button.update:
-                id: btn_garage_office
-                styles: nav_button_active
-            - lvgl.button.update:
-                id: btn_basement_office
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_office_office
-                styles: nav_button
-      - if:
-          condition:
-            lambda: 'return id(active_page) == 1;'
-          then:
-            # Garage page buttons - basement active
-            - lvgl.button.update:
-                id: btn_garage
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_basement
-                styles: nav_button_active
-            - lvgl.button.update:
-                id: btn_office
-                styles: nav_button
-            # Basement page buttons - active
-            - lvgl.button.update:
-                id: btn_garage_basement
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_basement_basement
-                styles: nav_button_active
-            - lvgl.button.update:
-                id: btn_office_basement
-                styles: nav_button
-            # Office page buttons - basement active
-            - lvgl.button.update:
-                id: btn_garage_office
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_basement_office
-                styles: nav_button_active
-            - lvgl.button.update:
-                id: btn_office_office
-                styles: nav_button
-      - if:
-          condition:
-            lambda: 'return id(active_page) == 2;'
-          then:
-            # Garage page buttons - office active
-            - lvgl.button.update:
-                id: btn_garage
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_basement
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_office
-                styles: nav_button_active
-            # Basement page buttons - office active
-            - lvgl.button.update:
-                id: btn_garage_basement
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_basement_basement
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_office_basement
-                styles: nav_button_active
-            # Office page buttons - active
-            - lvgl.button.update:
-                id: btn_garage_office
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_basement_office
-                styles: nav_button
-            - lvgl.button.update:
-                id: btn_office_office
-                styles: nav_button_active
+            # - lvgl.button.update:
+            #     id: btn_basement
+            #     styles: nav_button
+            # - lvgl.button.update:
+            #     id: btn_office
+            #     styles: nav_button
+            # # Basement page buttons - garage active
+            # - lvgl.button.update:
+            #     id: btn_garage_basement
+            #     styles: nav_button_active
+            # - lvgl.button.update:
+            #     id: btn_basement_basement
+            #     styles: nav_button
+            # - lvgl.button.update:
+            #     id: btn_office_basement
+            #     styles: nav_button
+            # # Office page buttons - garage active
+            # - lvgl.button.update:
+            #     id: btn_garage_office
+            #     styles: nav_button_active
+            # - lvgl.button.update:
+            #     id: btn_basement_office
+            #     styles: nav_button
+            # - lvgl.button.update:
+            #     id: btn_office_office
+            #     styles: nav_button
+      # - if:
+      #     condition:
+      #       lambda: 'return id(active_page) == 1;'
+      #     then:
+      #       # Garage page buttons - basement active
+      #       - lvgl.button.update:
+      #           id: btn_garage
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_basement
+      #           styles: nav_button_active
+      #       - lvgl.button.update:
+      #           id: btn_office
+      #           styles: nav_button
+      #       # Basement page buttons - active
+      #       - lvgl.button.update:
+      #           id: btn_garage_basement
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_basement_basement
+      #           styles: nav_button_active
+      #       - lvgl.button.update:
+      #           id: btn_office_basement
+      #           styles: nav_button
+      #       # Office page buttons - basement active
+      #       - lvgl.button.update:
+      #           id: btn_garage_office
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_basement_office
+      #           styles: nav_button_active
+      #       - lvgl.button.update:
+      #           id: btn_office_office
+      #           styles: nav_button
+      # - if:
+      #     condition:
+      #       lambda: 'return id(active_page) == 2;'
+      #     then:
+      #       # Garage page buttons - office active
+      #       - lvgl.button.update:
+      #           id: btn_garage
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_basement
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_office
+      #           styles: nav_button_active
+      #       # Basement page buttons - office active
+      #       - lvgl.button.update:
+      #           id: btn_garage_basement
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_basement_basement
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_office_basement
+      #           styles: nav_button_active
+      #       # Office page buttons - active
+      #       - lvgl.button.update:
+      #           id: btn_garage_office
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_basement_office
+      #           styles: nav_button
+      #       - lvgl.button.update:
+      #           id: btn_office_office
+      #           styles: nav_button_active
 
   # GARAGE SCRIPTS
   - id: update_garage_door
@@ -1263,203 +1263,203 @@ script:
                 text: "CLOSED"
                 text_color: 0xffffff
 
-  - id: update_garage_light
-    then:
-      - if:
-          condition:
-            lambda: 'return id(garage_light_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: garage_light_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: garage_light_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: garage_light_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: garage_light_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: garage_light_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: garage_light_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_garage_light
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(garage_light_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: garage_light_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: garage_light_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: garage_light_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: garage_light_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: garage_light_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: garage_light_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
   # BASEMENT SCRIPTS
-  - id: update_basement_landing
-    then:
-      - if:
-          condition:
-            lambda: 'return id(basement_landing_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: basement_landing_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: basement_landing_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: basement_landing_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: basement_landing_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: basement_landing_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: basement_landing_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_basement_landing
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(basement_landing_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: basement_landing_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: basement_landing_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: basement_landing_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: basement_landing_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: basement_landing_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: basement_landing_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
-  - id: update_basement_living_1
-    then:
-      - if:
-          condition:
-            lambda: 'return id(basement_living_1_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: basement_living_1_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: basement_living_1_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: basement_living_1_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: basement_living_1_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: basement_living_1_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: basement_living_1_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_basement_living_1
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(basement_living_1_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: basement_living_1_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: basement_living_1_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: basement_living_1_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: basement_living_1_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: basement_living_1_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: basement_living_1_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
-  - id: update_basement_living_2
-    then:
-      - if:
-          condition:
-            lambda: 'return id(basement_living_2_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: basement_living_2_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: basement_living_2_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: basement_living_2_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: basement_living_2_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: basement_living_2_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: basement_living_2_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_basement_living_2
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(basement_living_2_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: basement_living_2_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: basement_living_2_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: basement_living_2_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: basement_living_2_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: basement_living_2_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: basement_living_2_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
-  - id: update_xmas_light_basement
-    then:
-      - if:
-          condition:
-            lambda: 'return id(xmas_light_basement_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: xmas_light_basement_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: xmas_light_basement_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: xmas_light_basement_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: xmas_light_basement_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: xmas_light_basement_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: xmas_light_basement_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_xmas_light_basement
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(xmas_light_basement_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: xmas_light_basement_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: xmas_light_basement_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: xmas_light_basement_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: xmas_light_basement_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: xmas_light_basement_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: xmas_light_basement_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
   # OFFICE SCRIPTS
-  - id: update_office_desk_light
-    then:
-      - if:
-          condition:
-            lambda: 'return id(office_desk_light_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: office_desk_light_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: office_desk_light_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: office_desk_light_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: office_desk_light_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: office_desk_light_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: office_desk_light_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_office_desk_light
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(office_desk_light_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: office_desk_light_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: office_desk_light_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: office_desk_light_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: office_desk_light_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: office_desk_light_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: office_desk_light_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
-  - id: update_outlet_mk4
-    then:
-      - if:
-          condition:
-            lambda: 'return id(outlet_mk4_state).state == "on";'
-          then:
-            - lvgl.button.update:
-                id: outlet_mk4_btn
-                styles: device_button_active
-            - lvgl.label.update:
-                id: outlet_mk4_icon
-                text_color: 0xff9e00
-            - lvgl.label.update:
-                id: outlet_mk4_status
-                text: "ON"
-                text_color: 0x000000
-          else:
-            - lvgl.button.update:
-                id: outlet_mk4_btn
-                styles: device_button
-            - lvgl.label.update:
-                id: outlet_mk4_icon
-                text_color: 0xffffff
-            - lvgl.label.update:
-                id: outlet_mk4_status
-                text: "OFF"
-                text_color: 0xffffff
+  # - id: update_outlet_mk4
+    # then:
+      # - if:
+          # condition:
+            # lambda: 'return id(outlet_mk4_state).state == "on";'
+          # then:
+            # - lvgl.button.update:
+                # id: outlet_mk4_btn
+                # styles: device_button_active
+            # - lvgl.label.update:
+                # id: outlet_mk4_icon
+                # text_color: 0xff9e00
+            # - lvgl.label.update:
+                # id: outlet_mk4_status
+                # text: "ON"
+                # text_color: 0x000000
+          # else:
+            # - lvgl.button.update:
+                # id: outlet_mk4_btn
+                # styles: device_button
+            # - lvgl.label.update:
+                # id: outlet_mk4_icon
+                # text_color: 0xffffff
+            # - lvgl.label.update:
+                # id: outlet_mk4_status
+                # text: "OFF"
+                # text_color: 0xffffff
 
   # Camera popup scripts
   - id: show_camera_popup
