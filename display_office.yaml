@@ -221,6 +221,7 @@ font:
       "\U000F0335", # mdi-lightbulb (lights)
       "\U000F0336", # mdi-lightbulb-outline (lights off)
       "\U000F0769", # mdi-power-plug (outlets)
+      "\U000F0076", # mdi-garage (garage door)
       "\U000F050F", # mdi-home (home)
       "\U000F002D", # mdi-bed (bedroom)
       "\U000F0C99", # mdi-stairs (stairs)
@@ -483,8 +484,8 @@ lvgl:
                   layout:
                     type: FLEX
                     flex_flow: ROW_WRAP
-                    flex_align_main: START
-                    flex_align_cross: START
+                    flex_align_main: CENTER
+                    flex_align_cross: CENTER
                     pad_row: 25
                     pad_column: 60
                   widgets:
@@ -673,8 +674,8 @@ lvgl:
                   layout:
                     type: FLEX
                     flex_flow: ROW_WRAP
-                    flex_align_main: START
-                    flex_align_cross: START
+                    flex_align_main: CENTER
+                    flex_align_cross: CENTER
                     pad_row: 25
                     pad_column: 60
                   widgets:
