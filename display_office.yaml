@@ -285,57 +285,57 @@ text_sensor:
       then:
         - script.execute: update_garage_door
 
-  - platform: homeassistant
-    entity_id: switch.garage_light
-    id: garage_light_state
-    on_value:
-      then:
-        - script.execute: update_garage_light
+  # - platform: homeassistant
+  #   entity_id: switch.garage_light
+  #   id: garage_light_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_garage_light
 
-  # BASEMENT DEVICES - Light Switches
-  - platform: homeassistant
-    entity_id: switch.lightswitcbasementlanding
-    id: basement_landing_state
-    on_value:
-      then:
-        - script.execute: update_basement_landing
+  # # BASEMENT DEVICES - Light Switches
+  # - platform: homeassistant
+  #   entity_id: switch.lightswitcbasementlanding
+  #   id: basement_landing_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_basement_landing
 
-  - platform: homeassistant
-    entity_id: switch.lightswitch01basementliving
-    id: basement_living_1_state
-    on_value:
-      then:
-        - script.execute: update_basement_living_1
+  # - platform: homeassistant
+  #   entity_id: switch.lightswitch01basementliving
+  #   id: basement_living_1_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_basement_living_1
 
-  - platform: homeassistant
-    entity_id: switch.lightswitch02basementliving
-    id: basement_living_2_state
-    on_value:
-      then:
-        - script.execute: update_basement_living_2
+  # - platform: homeassistant
+  #   entity_id: switch.lightswitch02basementliving
+  #   id: basement_living_2_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_basement_living_2
 
-  # BASEMENT DEVICES - Power Outlets
-  - platform: homeassistant
-    entity_id: switch.outletxmaslight
-    id: xmas_light_basement_state
-    on_value:
-      then:
-        - script.execute: update_xmas_light_basement
+  # # BASEMENT DEVICES - Power Outlets
+  # - platform: homeassistant
+  #   entity_id: switch.outletxmaslight
+  #   id: xmas_light_basement_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_xmas_light_basement
 
-  # OFFICE DEVICES - Power Outlets
-  - platform: homeassistant
-    entity_id: switch.outletofficedesklight
-    id: office_desk_light_state
-    on_value:
-      then:
-        - script.execute: update_office_desk_light
+  # # OFFICE DEVICES - Power Outlets
+  # - platform: homeassistant
+  #   entity_id: switch.outletofficedesklight
+  #   id: office_desk_light_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_office_desk_light
 
-  - platform: homeassistant
-    entity_id: switch.outletmk4
-    id: outlet_mk4_state
-    on_value:
-      then:
-        - script.execute: update_outlet_mk4
+  # - platform: homeassistant
+  #   entity_id: switch.outletmk4
+  #   id: outlet_mk4_state
+  #   on_value:
+  #     then:
+  #       - script.execute: update_outlet_mk4
 
 # Reolink camera human detection trigger
 binary_sensor:
@@ -536,50 +536,50 @@ lvgl:
                               width: 110
                               pad_top: 2
 
-                    # Garage Light Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: garage_light_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.garage_light
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: garage_light_icon
-                                    text: "\U000F0335"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "Garage Light"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: garage_light_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
+                    # # Garage Light Card
+                    # - obj:
+                    #     width: 110
+                    #     height: 130
+                    #     bg_opa: TRANSP
+                    #     scrollbar_mode: "off"
+                    #     border_width: 0
+                    #     layout:
+                    #       type: FLEX
+                    #       flex_flow: COLUMN
+                    #       flex_align_main: START
+                    #       flex_align_cross: CENTER
+                    #     widgets:
+                    #       - button:
+                    #           id: garage_light_btn
+                    #           styles: device_button
+                    #           on_click:
+                    #             - homeassistant.service:
+                    #                 service: switch.toggle
+                    #                 data:
+                    #                   entity_id: switch.garage_light
+                    #             - script.execute: reset_inactivity_timer
+                    #           widgets:
+                    #             - label:
+                    #                 id: garage_light_icon
+                    #                 text: "\U000F0335"
+                    #                 text_color: 0xFFFFFF
+                    #                 text_font: mdi_large
+                    #                 align: CENTER
+                    #       - label:
+                    #           text: "Garage Light"
+                    #           text_color: 0xE6E1E5
+                    #           text_font: font_normal
+                    #           text_align: CENTER
+                    #           width: 110
+                    #           pad_top: 8
+                    #       - label:
+                    #           id: garage_light_status
+                    #           text: "OFF"
+                    #           text_color: 0xCCCCCC
+                    #           text_font: font_small
+                    #           text_align: CENTER
+                    #           width: 110
+                    #           pad_top: 2
 
               # Taskbar at bottom
               - obj:
@@ -613,520 +613,520 @@ lvgl:
                               text_font: font_normal
                               align: CENTER
 
-                    - button:
-                        id: btn_basement
-                        x: 267
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: basement_page
-                          - lambda: |-
-                              id(active_page) = 1;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Basement"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
+                    # - button:
+                    #     id: btn_basement
+                    #     x: 267
+                    #     y: 0
+                    #     styles: nav_button
+                    #     on_click:
+                    #       - lvgl.page.show: basement_page
+                    #       - lambda: |-
+                    #           id(active_page) = 1;
+                    #       - script.execute: refresh_nav_buttons
+                    #       - script.execute: reset_inactivity_timer
+                    #     widgets:
+                    #       - label:
+                    #           text: "Basement"
+                    #           text_color: 0xE6E1E5
+                    #           text_font: font_normal
+                    #           align: CENTER
 
-                    - button:
-                        id: btn_office
-                        x: 534
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: office_page
-                          - lambda: |-
-                              id(active_page) = 2;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Office"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
+                    # - button:
+                    #     id: btn_office
+                    #     x: 534
+                    #     y: 0
+                    #     styles: nav_button
+                    #     on_click:
+                    #       - lvgl.page.show: office_page
+                    #       - lambda: |-
+                    #           id(active_page) = 2;
+                    #       - script.execute: refresh_nav_buttons
+                    #       - script.execute: reset_inactivity_timer
+                    #     widgets:
+                    #       - label:
+                    #           text: "Office"
+                    #           text_color: 0xE6E1E5
+                    #           text_font: font_normal
+                    #           align: CENTER
 
-    - id: basement_page
-      widgets:
-        - obj:
-            width: 800
-            height: 480
-            x: 0
-            y: 0
-            styles: page_style
-            widgets:
-              - label:
-                  text: "Basement"
-                  text_color: 0xE6E1E5
-                  text_font: font_header
-                  x: 0
-                  y: 15
-                  width: 800
-                  height: 40
-                  text_align: CENTER
-
+    # - id: basement_page
+    #       widgets:
+    #         - obj:
+    #             width: 800
+    #             height: 480
+    #             x: 0
+    #             y: 0
+    #             styles: page_style
+    #             widgets:
+    #               - label:
+    #                   text: "Basement"
+    #                   text_color: 0xE6E1E5
+    #                   text_font: font_header
+    #                   x: 0
+    #                   y: 15
+    #                   width: 800
+    #                   height: 40
+    #                   text_align: CENTER
+    # 
               # Flex container for device cards
-              - obj:
-                  x: 100
-                  y: 80
-                  width: 600
-                  height: 310
-                  bg_opa: TRANSP
-                  border_width: 0
-                  scrollbar_mode: "off"
-                  layout:
-                    type: FLEX
-                    flex_flow: ROW_WRAP
-                    flex_align_main: CENTER
-                    flex_align_cross: CENTER
-                    pad_row: 25
-                    pad_column: 60
-                  widgets:
+    #               - obj:
+    #                   x: 100
+    #                   y: 80
+    #                   width: 600
+    #                   height: 310
+    #                   bg_opa: TRANSP
+    #                   border_width: 0
+    #                   scrollbar_mode: "off"
+    #                   layout:
+    #                     type: FLEX
+    #                     flex_flow: ROW_WRAP
+    #                     flex_align_main: CENTER
+    #                     flex_align_cross: CENTER
+    #                     pad_row: 25
+    #                     pad_column: 60
+    #                   widgets:
                     # Landing Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: basement_landing_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.lightswitcbasementlanding
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: basement_landing_icon
-                                    text: "\U000F0335"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "Landing"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: basement_landing_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
-
+    #                     - obj:
+    #                         width: 110
+    #                         height: 130
+    #                         bg_opa: TRANSP
+    #                         scrollbar_mode: "off"
+    #                         border_width: 0
+    #                         layout:
+    #                           type: FLEX
+    #                           flex_flow: COLUMN
+    #                           flex_align_main: START
+    #                           flex_align_cross: CENTER
+    #                         widgets:
+    #                           - button:
+    #                               id: basement_landing_btn
+    #                               styles: device_button
+    #                               on_click:
+    #                                 - homeassistant.service:
+    #                                     service: switch.toggle
+    #                                     data:
+    #                                       entity_id: switch.lightswitcbasementlanding
+    #                                 - script.execute: reset_inactivity_timer
+    #                               widgets:
+    #                                 - label:
+    #                                     id: basement_landing_icon
+    #                                     text: "\U000F0335"
+    #                                     text_color: 0xFFFFFF
+    #                                     text_font: mdi_large
+    #                                     align: CENTER
+    #                           - label:
+    #                               text: "Landing"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 8
+    #                           - label:
+    #                               id: basement_landing_status
+    #                               text: "OFF"
+    #                               text_color: 0xCCCCCC
+    #                               text_font: font_small
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 2
+    # 
                     # Living 1 Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: basement_living_1_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.lightswitch01basementliving
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: basement_living_1_icon
-                                    text: "\U000F0335"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "Living 1"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: basement_living_1_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
-
+    #                     - obj:
+    #                         width: 110
+    #                         height: 130
+    #                         bg_opa: TRANSP
+    #                         scrollbar_mode: "off"
+    #                         border_width: 0
+    #                         layout:
+    #                           type: FLEX
+    #                           flex_flow: COLUMN
+    #                           flex_align_main: START
+    #                           flex_align_cross: CENTER
+    #                         widgets:
+    #                           - button:
+    #                               id: basement_living_1_btn
+    #                               styles: device_button
+    #                               on_click:
+    #                                 - homeassistant.service:
+    #                                     service: switch.toggle
+    #                                     data:
+    #                                       entity_id: switch.lightswitch01basementliving
+    #                                 - script.execute: reset_inactivity_timer
+    #                               widgets:
+    #                                 - label:
+    #                                     id: basement_living_1_icon
+    #                                     text: "\U000F0335"
+    #                                     text_color: 0xFFFFFF
+    #                                     text_font: mdi_large
+    #                                     align: CENTER
+    #                           - label:
+    #                               text: "Living 1"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 8
+    #                           - label:
+    #                               id: basement_living_1_status
+    #                               text: "OFF"
+    #                               text_color: 0xCCCCCC
+    #                               text_font: font_small
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 2
+    # 
                     # Living 2 Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: basement_living_2_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.lightswitch02basementliving
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: basement_living_2_icon
-                                    text: "\U000F0335"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "Living 2"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: basement_living_2_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
-
+    #                     - obj:
+    #                         width: 110
+    #                         height: 130
+    #                         bg_opa: TRANSP
+    #                         scrollbar_mode: "off"
+    #                         border_width: 0
+    #                         layout:
+    #                           type: FLEX
+    #                           flex_flow: COLUMN
+    #                           flex_align_main: START
+    #                           flex_align_cross: CENTER
+    #                         widgets:
+    #                           - button:
+    #                               id: basement_living_2_btn
+    #                               styles: device_button
+    #                               on_click:
+    #                                 - homeassistant.service:
+    #                                     service: switch.toggle
+    #                                     data:
+    #                                       entity_id: switch.lightswitch02basementliving
+    #                                 - script.execute: reset_inactivity_timer
+    #                               widgets:
+    #                                 - label:
+    #                                     id: basement_living_2_icon
+    #                                     text: "\U000F0335"
+    #                                     text_color: 0xFFFFFF
+    #                                     text_font: mdi_large
+    #                                     align: CENTER
+    #                           - label:
+    #                               text: "Living 2"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 8
+    #                           - label:
+    #                               id: basement_living_2_status
+    #                               text: "OFF"
+    #                               text_color: 0xCCCCCC
+    #                               text_font: font_small
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 2
+    # 
                     # Xmas Light Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: xmas_light_basement_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.outletxmaslight
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: xmas_light_basement_icon
-                                    text: "\U000F0769"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "Xmas Light"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: xmas_light_basement_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
-
+    #                     - obj:
+    #                         width: 110
+    #                         height: 130
+    #                         bg_opa: TRANSP
+    #                         scrollbar_mode: "off"
+    #                         border_width: 0
+    #                         layout:
+    #                           type: FLEX
+    #                           flex_flow: COLUMN
+    #                           flex_align_main: START
+    #                           flex_align_cross: CENTER
+    #                         widgets:
+    #                           - button:
+    #                               id: xmas_light_basement_btn
+    #                               styles: device_button
+    #                               on_click:
+    #                                 - homeassistant.service:
+    #                                     service: switch.toggle
+    #                                     data:
+    #                                       entity_id: switch.outletxmaslight
+    #                                 - script.execute: reset_inactivity_timer
+    #                               widgets:
+    #                                 - label:
+    #                                     id: xmas_light_basement_icon
+    #                                     text: "\U000F0769"
+    #                                     text_color: 0xFFFFFF
+    #                                     text_font: mdi_large
+    #                                     align: CENTER
+    #                           - label:
+    #                               text: "Xmas Light"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 8
+    #                           - label:
+    #                               id: xmas_light_basement_status
+    #                               text: "OFF"
+    #                               text_color: 0xCCCCCC
+    #                               text_font: font_small
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 2
+    # 
               # Taskbar at bottom
-              - obj:
-                  x: 0
-                  y: 440
-                  width: 800
-                  height: 40
-                  bg_color: 0x1C1B1F
-                  bg_opa: COVER
-                  border_width: 1
-                  border_side: TOP
-                  border_color: 0x49454F
-                  border_opa: 50%
-                  pad_all: 0
-                  widgets:
-                    - button:
-                        id: btn_garage_basement
-                        x: 0
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: garage_page
-                          - lambda: |-
-                              id(active_page) = 0;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Garage"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
-
-                    - button:
-                        id: btn_basement_basement
-                        x: 267
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: basement_page
-                          - lambda: |-
-                              id(active_page) = 1;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Basement"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
-
-                    - button:
-                        id: btn_office_basement
-                        x: 534
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: office_page
-                          - lambda: |-
-                              id(active_page) = 2;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Office"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
-
-    - id: office_page
-      widgets:
-        - obj:
-            width: 800
-            height: 480
-            x: 0
-            y: 0
-            styles: page_style
-            widgets:
-              - label:
-                  text: "Office"
-                  text_color: 0xE6E1E5
-                  text_font: font_header
-                  x: 0
-                  y: 15
-                  width: 800
-                  height: 40
-                  text_align: CENTER
-
+    #               - obj:
+    #                   x: 0
+    #                   y: 440
+    #                   width: 800
+    #                   height: 40
+    #                   bg_color: 0x1C1B1F
+    #                   bg_opa: COVER
+    #                   border_width: 1
+    #                   border_side: TOP
+    #                   border_color: 0x49454F
+    #                   border_opa: 50%
+    #                   pad_all: 0
+    #                   widgets:
+    #                     - button:
+    #                         id: btn_garage_basement
+    #                         x: 0
+    #                         y: 0
+    #                         styles: nav_button
+    #                         on_click:
+    #                           - lvgl.page.show: garage_page
+    #                           - lambda: |-
+    #                               id(active_page) = 0;
+    #                           - script.execute: refresh_nav_buttons
+    #                           - script.execute: reset_inactivity_timer
+    #                         widgets:
+    #                           - label:
+    #                               text: "Garage"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               align: CENTER
+    # 
+    #                     - button:
+    #                         id: btn_basement_basement
+    #                         x: 267
+    #                         y: 0
+    #                         styles: nav_button
+    #                         on_click:
+    #                           - lvgl.page.show: basement_page
+    #                           - lambda: |-
+    #                               id(active_page) = 1;
+    #                           - script.execute: refresh_nav_buttons
+    #                           - script.execute: reset_inactivity_timer
+    #                         widgets:
+    #                           - label:
+    #                               text: "Basement"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               align: CENTER
+    # 
+    #                     - button:
+    #                         id: btn_office_basement
+    #                         x: 534
+    #                         y: 0
+    #                         styles: nav_button
+    #                         on_click:
+    #                           - lvgl.page.show: office_page
+    #                           - lambda: |-
+    #                               id(active_page) = 2;
+    #                           - script.execute: refresh_nav_buttons
+    #                           - script.execute: reset_inactivity_timer
+    #                         widgets:
+    #                           - label:
+    #                               text: "Office"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               align: CENTER
+    # 
+    #     - id: office_page
+    #       widgets:
+    #         - obj:
+    #             width: 800
+    #             height: 480
+    #             x: 0
+    #             y: 0
+    #             styles: page_style
+    #             widgets:
+    #               - label:
+    #                   text: "Office"
+    #                   text_color: 0xE6E1E5
+    #                   text_font: font_header
+    #                   x: 0
+    #                   y: 15
+    #                   width: 800
+    #                   height: 40
+    #                   text_align: CENTER
+    # 
               # Flex container for device cards
-              - obj:
-                  x: 100
-                  y: 80
-                  width: 600
-                  height: 310
-                  bg_opa: TRANSP
-                  border_width: 0
-                  scrollbar_mode: "off"
-                  layout:
-                    type: FLEX
-                    flex_flow: ROW_WRAP
-                    flex_align_main: CENTER
-                    flex_align_cross: CENTER
-                    pad_row: 25
-                    pad_column: 60
-                  widgets:
+    #               - obj:
+    #                   x: 100
+    #                   y: 80
+    #                   width: 600
+    #                   height: 310
+    #                   bg_opa: TRANSP
+    #                   border_width: 0
+    #                   scrollbar_mode: "off"
+    #                   layout:
+    #                     type: FLEX
+    #                     flex_flow: ROW_WRAP
+    #                     flex_align_main: CENTER
+    #                     flex_align_cross: CENTER
+    #                     pad_row: 25
+    #                     pad_column: 60
+    #                   widgets:
                     # Desk Light Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: office_desk_light_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.outletofficedesklight
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: office_desk_light_icon
-                                    text: "\U000F0769"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "Desk Light"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: office_desk_light_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
-
+    #                     - obj:
+    #                         width: 110
+    #                         height: 130
+    #                         bg_opa: TRANSP
+    #                         scrollbar_mode: "off"
+    #                         border_width: 0
+    #                         layout:
+    #                           type: FLEX
+    #                           flex_flow: COLUMN
+    #                           flex_align_main: START
+    #                           flex_align_cross: CENTER
+    #                         widgets:
+    #                           - button:
+    #                               id: office_desk_light_btn
+    #                               styles: device_button
+    #                               on_click:
+    #                                 - homeassistant.service:
+    #                                     service: switch.toggle
+    #                                     data:
+    #                                       entity_id: switch.outletofficedesklight
+    #                                 - script.execute: reset_inactivity_timer
+    #                               widgets:
+    #                                 - label:
+    #                                     id: office_desk_light_icon
+    #                                     text: "\U000F0769"
+    #                                     text_color: 0xFFFFFF
+    #                                     text_font: mdi_large
+    #                                     align: CENTER
+    #                           - label:
+    #                               text: "Desk Light"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 8
+    #                           - label:
+    #                               id: office_desk_light_status
+    #                               text: "OFF"
+    #                               text_color: 0xCCCCCC
+    #                               text_font: font_small
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 2
+    # 
                     # MK4 Card
-                    - obj:
-                        width: 110
-                        height: 130
-                        bg_opa: TRANSP
-                        scrollbar_mode: "off"
-                        border_width: 0
-                        layout:
-                          type: FLEX
-                          flex_flow: COLUMN
-                          flex_align_main: START
-                          flex_align_cross: CENTER
-                        widgets:
-                          - button:
-                              id: outlet_mk4_btn
-                              styles: device_button
-                              on_click:
-                                - homeassistant.service:
-                                    service: switch.toggle
-                                    data:
-                                      entity_id: switch.outletmk4
-                                - script.execute: reset_inactivity_timer
-                              widgets:
-                                - label:
-                                    id: outlet_mk4_icon
-                                    text: "\U000F0769"
-                                    text_color: 0xFFFFFF
-                                    text_font: mdi_large
-                                    align: CENTER
-                          - label:
-                              text: "MK4"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 8
-                          - label:
-                              id: outlet_mk4_status
-                              text: "OFF"
-                              text_color: 0xCCCCCC
-                              text_font: font_small
-                              text_align: CENTER
-                              width: 110
-                              pad_top: 2
-
+    #                     - obj:
+    #                         width: 110
+    #                         height: 130
+    #                         bg_opa: TRANSP
+    #                         scrollbar_mode: "off"
+    #                         border_width: 0
+    #                         layout:
+    #                           type: FLEX
+    #                           flex_flow: COLUMN
+    #                           flex_align_main: START
+    #                           flex_align_cross: CENTER
+    #                         widgets:
+    #                           - button:
+    #                               id: outlet_mk4_btn
+    #                               styles: device_button
+    #                               on_click:
+    #                                 - homeassistant.service:
+    #                                     service: switch.toggle
+    #                                     data:
+    #                                       entity_id: switch.outletmk4
+    #                                 - script.execute: reset_inactivity_timer
+    #                               widgets:
+    #                                 - label:
+    #                                     id: outlet_mk4_icon
+    #                                     text: "\U000F0769"
+    #                                     text_color: 0xFFFFFF
+    #                                     text_font: mdi_large
+    #                                     align: CENTER
+    #                           - label:
+    #                               text: "MK4"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 8
+    #                           - label:
+    #                               id: outlet_mk4_status
+    #                               text: "OFF"
+    #                               text_color: 0xCCCCCC
+    #                               text_font: font_small
+    #                               text_align: CENTER
+    #                               width: 110
+    #                               pad_top: 2
+    # 
               # Taskbar at bottom
-              - obj:
-                  x: 0
-                  y: 440
-                  width: 800
-                  height: 40
-                  bg_color: 0x1C1B1F
-                  bg_opa: COVER
-                  border_width: 1
-                  border_side: TOP
-                  border_color: 0x49454F
-                  border_opa: 50%
-                  pad_all: 0
-                  widgets:
-                    - button:
-                        id: btn_garage_office
-                        x: 0
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: garage_page
-                          - lambda: |-
-                              id(active_page) = 0;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Garage"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
-
-                    - button:
-                        id: btn_basement_office
-                        x: 267
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: basement_page
-                          - lambda: |-
-                              id(active_page) = 1;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Basement"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
-
-                    - button:
-                        id: btn_office_office
-                        x: 534
-                        y: 0
-                        styles: nav_button
-                        on_click:
-                          - lvgl.page.show: office_page
-                          - lambda: |-
-                              id(active_page) = 2;
-                          - script.execute: refresh_nav_buttons
-                          - script.execute: reset_inactivity_timer
-                        widgets:
-                          - label:
-                              text: "Office"
-                              text_color: 0xE6E1E5
-                              text_font: font_normal
-                              align: CENTER
-
+    #               - obj:
+    #                   x: 0
+    #                   y: 440
+    #                   width: 800
+    #                   height: 40
+    #                   bg_color: 0x1C1B1F
+    #                   bg_opa: COVER
+    #                   border_width: 1
+    #                   border_side: TOP
+    #                   border_color: 0x49454F
+    #                   border_opa: 50%
+    #                   pad_all: 0
+    #                   widgets:
+    #                     - button:
+    #                         id: btn_garage_office
+    #                         x: 0
+    #                         y: 0
+    #                         styles: nav_button
+    #                         on_click:
+    #                           - lvgl.page.show: garage_page
+    #                           - lambda: |-
+    #                               id(active_page) = 0;
+    #                           - script.execute: refresh_nav_buttons
+    #                           - script.execute: reset_inactivity_timer
+    #                         widgets:
+    #                           - label:
+    #                               text: "Garage"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               align: CENTER
+    # 
+    #                     - button:
+    #                         id: btn_basement_office
+    #                         x: 267
+    #                         y: 0
+    #                         styles: nav_button
+    #                         on_click:
+    #                           - lvgl.page.show: basement_page
+    #                           - lambda: |-
+    #                               id(active_page) = 1;
+    #                           - script.execute: refresh_nav_buttons
+    #                           - script.execute: reset_inactivity_timer
+    #                         widgets:
+    #                           - label:
+    #                               text: "Basement"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               align: CENTER
+    # 
+    #                     - button:
+    #                         id: btn_office_office
+    #                         x: 534
+    #                         y: 0
+    #                         styles: nav_button
+    #                         on_click:
+    #                           - lvgl.page.show: office_page
+    #                           - lambda: |-
+    #                               id(active_page) = 2;
+    #                           - script.execute: refresh_nav_buttons
+    #                           - script.execute: reset_inactivity_timer
+    #                         widgets:
+    #                           - label:
+    #                               text: "Office"
+    #                               text_color: 0xE6E1E5
+    #                               text_font: font_normal
+    #                               align: CENTER
+    # 
 # SCRIPTS SECTION
 script:
   - id: refresh_nav_buttons
